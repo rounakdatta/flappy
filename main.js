@@ -1,15 +1,11 @@
-// Create our 'main' state that will contain the game
 var mainState = {
 	preload: function() { 
-		// This function will be executed at the beginning     
-		// That's where we load the images and sounds
+
 		game.load.image('bird', 'assets/bird.png'); //bird image lodaded 
 		game.load.image('pipe', 'assets/pipe.png') //pipe image loaded
 	},
 
 	create: function() { 
-		// This function is called after the preload function     
-		// Here we set up the game, display sprites, etc.
 
 		game.stage.backgroundColor = '#71c5cf'; //background set as blue
 
@@ -28,19 +24,17 @@ var mainState = {
 
 		this.timer = game.time.events.loop(1500, this.addRowOfPipes, this); 
 
-		this.score = 0;
+		this.score = 0; //score variable
 		this.labelScore = game.add.text(20, 20, "0", 
     		{ font: "30px Arial", fill: "#ffffff" }); 
 	},
 
 	update: function() {
-		// This function is called 60 times per second    
-		// It contains the game's logic   
+ 
 		if(this.bird.y < 0 || this.bird.y > 490)
-			this.restartGame();
+			this.restartGame(); //why is bird going out of my screen
 
-		game.physics.arcade.overlap(
-    	this.bird, this.pipes, this.restartGame, null, this);
+		game.physics.arcade.overlap(this.bird, this.pipes, this.restartGame, null, this); //losing overlap logic here
 
 	},
 
@@ -59,7 +53,7 @@ var mainState = {
 
 		game.physics.arcade.enable(pipe);
 
-		pipe.body.velocity.x = -200;
+		pipe.body.velocity.x = -200; //pipes logically move left
 
 		pipe.checkWorldBounds = true; //check if object within game world (area yeah)
 		pipe.outOfBoundKill = true; //kill the object if its outside the world
@@ -72,16 +66,13 @@ var mainState = {
 			if(i != hole && i != hole + 1)
 				this.addOnePipe(400, i * 60 + 10);
 
-		this.score += 1;
+		this.score += 1; //so score logically increases whenever a new row of pipes is added :-/ s = ut
 		this.labelScore.text = this.score;  
 	},
 };
 
-// Initialize Phaser, and create a 400px by 490px game
 var game = new Phaser.Game(400, 490);
 
-// Add the 'mainState' and call it 'main'
 game.state.add('main', mainState); 
 
-// Start the state to actually start the game
-game.state.start('main');
+game.state.start('main'); //start here
