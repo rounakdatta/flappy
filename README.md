@@ -1,2 +1,0 @@
-# flappy
-Classics revisited
