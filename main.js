@@ -1,14 +1,18 @@
 var mainState = {
 	preload: function() { 
 
-		game.load.image('bird', 'assets/bird.png'); //bird image lodaded 
+		game.load.image('bird', 'assets/bird.png'); //bird image loaded 
 		game.load.image('pipe', 'assets/pipe.png') //pipe image loaded
 		game.load.audio('jump', 'assets/jump.wav'); //jump sound loaded
+
+		game.load.image('background', 'assets/day.png'); //background image
 	},
 
 	create: function() { 
 
-		game.stage.backgroundColor = '#71c5cf'; //background set as blue
+		this.background = this.add.tileSprite(0,0, this.world.width, this.world.height, 'background'); //classic background
+
+		//game.stage.backgroundColor = '#71c5cf'; //background set as blue
 
 		game.physics.startSystem(Phaser.Physics.ARCADE); //load the physics engine
 
@@ -42,11 +46,12 @@ var mainState = {
 		game.physics.arcade.overlap(this.bird, this.pipes, this.hitPipe, null, this); //losing overlap logic here
 
 		if(this.bird.angle < 20)
-			this.bird.angle += 1
+			this.bird.angle += 1 //slowly get horizontal
 	},
 
 	jump: function() {
-		if (this.bird.alive == false)
+
+		if (this.bird.alive == false) //no jumping if you are dead
     		return;
 
 		this.bird.body.velocity.y = -350; //jumping gives a vertical velocity to the bird in upward direction
@@ -61,18 +66,14 @@ var mainState = {
 	},
 
 	hitPipe: function() {
-	    // If the bird has already hit a pipe, do nothing
-	    // It means the bird is already falling off the screen
+
 	    if (this.bird.alive == false)
 	        return;
 
-	    // Set the alive property of the bird to false
 	    this.bird.alive = false;
 
-	    // Prevent new pipes from appearing
 	    game.time.events.remove(this.timer);
 
-	    // Go through all the pipes, and stop their movement
 	    this.pipes.forEach(function(p){
 	        	p.body.velocity.x = 0;
 	    	}, this);
